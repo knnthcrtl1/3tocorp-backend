@@ -30,4 +30,4 @@ app.use('/trainers', trainerRouter);
 app.use('/users', userRouter);
 
 
-app.listen(3001, () => { console.log('Server is running...') });
+app.listen(process.env.PORT || 3000 , () => { console.log(`Server is running n port ${process.env.PORT}`) });
