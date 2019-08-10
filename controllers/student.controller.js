@@ -1,6 +1,6 @@
 const studentModel = require('../models/student.model');
 const userModel = require('../models/user.model');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const saltRounds = 10;
 const myPlaintextPassword = 'test123';
 
