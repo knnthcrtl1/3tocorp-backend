@@ -1,7 +1,6 @@
 const studentModel = require('../models/student.model');
 const userModel = require('../models/user.model');
-const bcrypt = require('bcrypt-nodejs');
-const saltRounds = 10;
+const bcrypt = require('bcryptjs');
 const myPlaintextPassword = 'test123';
 
 exports.student_get = async (req, res) => {
@@ -26,19 +25,19 @@ exports.student_create = async (req, res) => {
         res.send(student._id);
 
 
-        bcrypt.hash(myPlaintextPassword, saltRounds, async (err, hash) => {
-                // Store hash in your password DB.
-                const user = new userModel({
-                    user_id: student._id,
-                    username: student.email,
-                    password: hash,
-                    restriction: 1
-                });
+        bcrypt.genSalt(10, async (err, salt) => {
+            bcrypt.hash(myPlaintextPassword, salt, async (err, hash) => {
+        // Store hash in your password DB.
+        const user = new userModel({
+            user_id: student._id,
+            username: student.email,
+            password: hash,
+            restriction: 1
+        });
 
-                await user.save();
-
-            });
-
+        await user.save();
+    });
+        });
 
 
     } catch (err) {

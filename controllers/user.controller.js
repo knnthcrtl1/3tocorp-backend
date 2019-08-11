@@ -1,5 +1,5 @@
 const userModel = require('../models/user.model');
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcryptjs');
 
 exports.user_create = async (req, res) => {
 
@@ -23,16 +23,20 @@ exports.user_signin = async (req, res) => {
 
         const validUsername = await user[Object.keys(user)[0]];
 
-        const isValid = bcrypt.compareSync(req.body.password, validUsername.password);
+        bcrypt.compare((req.body.password && req.body.password), validUsername.password,  async (err, isValid) => {
+    // res === true     
 
-        if (isValid) {
-            res.json(validUsername);
-        } else {
-            res.status(400).json('Wrong Credentials')
-        }
-        
+    if (isValid) {
+        res.json(validUsername);
+    } else {
+        res.status(400).json('Wrong Credentials')
+    }  
+
+});     
+
+
     } catch (err) {
-        res.status(400).json('wtf');
+        res.status(400).json(err);
     }
 
 }
