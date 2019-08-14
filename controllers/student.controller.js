@@ -6,32 +6,42 @@ const myPlaintextPassword = 'test123';
 exports.student_get = async (req, res) => {
     // const student = await studentModel.find({});
 
-    let pageNo = parseInt(req.query.pageNo)
-    let size = parseInt(req.query.size)
+    // try {
+    //     res.send(student);
+    // } catch (err) {
+    //     res.status(500).send(err);
+    // }
+
+    let pageNo = await parseInt(req.query.pageNo)
+    let size = await parseInt(req.query.size)
 
     let query = {}
+    let response = {}
+
     if(pageNo < 0 || pageNo === 0) {
-        response = {"error" : true,"message" : "invalid page number, should start with 1"};
-        return res.json(response)
-    }
-    query.skip = size * (pageNo - 1);
-    query.limit = size;
+       response = {"error" : true,"message" : "invalid page number, should start with 1"};
+       return res.json(response)
+   }
+
+   query.skip = size * (pageNo - 1);
+   query.limit = size;
+
   // Find some documents
-  studentModel.estimatedDocumentCount({},(err, totalCount) => {
+  studentModel.estimatedDocumentCount({}, async (err, totalCount) => {
    if(err) {
-     response = {"error" : true,"message" : "Error fetching data"}
- }
- 
- studentModel.find({},{},query,(err,data) => {
+    response = {"error" : true,"message" : "Error fetching data"}
+}
+
+studentModel.find({},{},query, async (err,data) => {
               // Mongo command to fetch all data from collection.
               if(err) {
-                response = {"error" : true,"message" : "Error fetching data"};
-            } else {
-                var totalPages = Math.ceil(totalCount / size)
-                response = {"error" : false,"message" : data,"pages": totalPages};
-            }
-            res.json(response);
-        });
+               response = {"error" : true,"message" : "Error fetching data"};
+           } else {
+            var totalPages = await Math.ceil(totalCount / size)
+            response = {"error" : false,"message" : data,"pages": totalPages};
+        }
+        res.json(response);
+    });
 })
 
 }
