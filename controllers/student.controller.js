@@ -12,19 +12,20 @@ exports.student_get = async (req, res) => {
     //     res.status(500).send(err);
     // }
 
-    let pageNo = await parseInt(req.query.pageNo)
-    let size = await parseInt(req.query.size)
+    try {
+        let pageNo = await parseInt(req.query.pageNo)
+        let size = await parseInt(req.query.size)
 
-    let query = {}
-    let response = {}
+        let query = {}
+        let response = {}
 
-    if(pageNo < 0 || pageNo === 0) {
-       response = {"error" : true,"message" : "invalid page number, should start with 1"};
-       return res.json(response)
-   }
+        if(pageNo < 0 || pageNo === 0) {
+           response = {"error" : true,"message" : "invalid page number, should start with 1"};
+           return res.json(response)
+       }
 
-   query.skip = size * (pageNo - 1);
-   query.limit = size;
+       query.skip = size * (pageNo - 1);
+       query.limit = size;
 
   // Find some documents
   studentModel.estimatedDocumentCount({}, async (err, totalCount) => {
@@ -43,6 +44,10 @@ studentModel.find({},{},query, async (err,data) => {
         res.json(response);
     });
 })
+
+} catch (err) {
+    res.status(500).send(err);
+}
 
 }
 
