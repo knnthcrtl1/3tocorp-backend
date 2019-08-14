@@ -17,12 +17,12 @@ exports.student_get = async (req, res) => {
     query.skip = size * (pageNo - 1);
     query.limit = size;
   // Find some documents
-  studentModel.countDocuments({},(err, totalCount) => {
-     if(err) {
-       response = {"error" : true,"message" : "Error fetching data"}
-   }
-   
-   studentModel.find({},{},query,(err,data) => {
+  studentModel.estimatedDocumentCount({},(err, totalCount) => {
+   if(err) {
+     response = {"error" : true,"message" : "Error fetching data"}
+ }
+ 
+ studentModel.find({},{},query,(err,data) => {
               // Mongo command to fetch all data from collection.
               if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
