@@ -4,50 +4,51 @@ const bcrypt = require('bcryptjs');
 const myPlaintextPassword = 'test123';
 
 exports.student_get = async (req, res) => {
-    // const student = await studentModel.find({});
-
-    // try {
-    //     res.send(student);
-    // } catch (err) {
-    //     res.status(500).send(err);
-    // }
+    const student = await studentModel.find({});
 
     try {
-        let pageNo = await parseInt(req.query.pageNo)
-        let size = await parseInt(req.query.size)
+        res.send(student);
+    } catch (err) {
+        res.status(500).send(err);
+    }    
+    // console.log(req.params);
 
-        let query = {}
-        let response = {}
+//     try {
+//         let pageNo = await parseInt(req.query.pageNo)
+//         let size = await parseInt(req.query.size)
 
-        if(pageNo < 0 || pageNo === 0) {
-           response = {"error" : true,"message" : "invalid page number, should start with 1"};
-           return res.json(response)
-       }
+//         let query = {}
+//         let response = {}
 
-       query.skip = size * (pageNo - 1);
-       query.limit = size;
+//         if(pageNo < 0 || pageNo === 0) {
+//            response = {"error" : true,"message" : "invalid page number, should start with 1"};
+//            return res.json(response)
+//        }
 
-  // Find some documents
-  studentModel.estimatedDocumentCount({}, async (err, totalCount) => {
-   if(err) {
-    response = {"error" : true,"message" : "Error fetching data"}
-}
+//        query.skip = size * (pageNo - 1);
+//        query.limit = size;
 
-studentModel.find({},{},query, async (err,data) => {
-              // Mongo command to fetch all data from collection.
-              if(err) {
-               response = {"error" : true,"message" : "Error fetching data"};
-           } else {
-            var totalPages = await Math.ceil(totalCount / size)
-            response = {"error" : false,"message" : data,"pages": totalPages};
-        }
-        res.json(response);
-    });
-})
+//   // Find some documents
+//   studentModel.estimatedDocumentCount({}, async (err, totalCount) => {
+//    if(err) {
+//     response = {"error" : true,"message" : "Error fetching data"}
+// }
 
-} catch (err) {
-    res.status(500).send(err);
-}
+// studentModel.find({},{},query, async (err,data) => {
+//               // Mongo command to fetch all data from collection.
+//               if(err) {
+//                response = {"error" : true,"message" : "Error fetching data"};
+//            } else {
+//             var totalPages = await Math.ceil(totalCount / size)
+//             response = {"error" : false,"message" : data,"pages": totalPages};
+//         }
+//         res.json(response);
+//     });
+// })
+
+// } catch (err) {
+//     res.status(500).send(err);
+// }
 
 }
 
