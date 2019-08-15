@@ -6,7 +6,7 @@ const StudentSchema = new mongoose.Schema({
         required: true,
         max: 250
     },
-    surname: {
+    middlename: {
         type: String,
         required: true,
         max: 250
