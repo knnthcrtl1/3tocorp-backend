@@ -18,7 +18,6 @@ exports.user_signin = async (req, res) => {
 
     const user = await userModel.find({ username: req.body.username });
 
-
     try {
 
         const validUsername = await user[Object.keys(user)[0]];
@@ -37,6 +36,7 @@ exports.user_signin = async (req, res) => {
 
     } catch (err) {
         res.status(400).json(err);
-    }
+        res.json(err);
+    }   
 
 }
