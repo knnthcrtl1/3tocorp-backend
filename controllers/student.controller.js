@@ -96,13 +96,12 @@ exports.student_delete = async (req, res) => {
     }
 }
 
-exports.student_update = async (req, res) => {
+exports.student_update = async (req, res, ) => {
     try {
         const student = await studentModel.findByIdAndUpdate(req.params.id, req.body);
-        await studentModel.save();
-        res.json(student)
+        await student.save();
+        res.json(student);
     } catch (err) {
-        res.status(500).send(err);
         res.json(err);
     }
 }
