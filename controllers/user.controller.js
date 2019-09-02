@@ -1,5 +1,6 @@
 const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 exports.user_create = async (req, res) => {
 
@@ -22,21 +23,27 @@ exports.user_signin = async (req, res) => {
 
         const validUsername = await user[Object.keys(user)[0]];
 
-        bcrypt.compare((req.body.password && req.body.password), validUsername.password,  async (err, isValid) => {
-    // res === true     
+        bcrypt.compare((req.body.password && req.body.password), validUsername.password, (err, isValid) => {
+            // res === true     
+            if (isValid) {
+                const token = jwt.sign({
+                    data: validUsername
+                }, 'secret', { expiresIn: '1hr' });
 
-    if (isValid) {
-        res.json(validUsername);
-    } else {
-        res.status(400).json('Wrong Credentials')
-    }  
+                res.json({
+                    data: validUsername,
+                    token: token
+                })
 
-});     
+            } else {
+                res.status(400).json('Password is incorrect');
+            }
+        });
 
 
     } catch (err) {
-        res.status(400).json(err);
-        res.json(err);
-    }   
+        res.status(400).json('username doesnt exist');
+        // res.json(err);
+    }
 
 }

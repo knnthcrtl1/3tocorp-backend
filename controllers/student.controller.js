@@ -96,12 +96,45 @@ exports.student_delete = async (req, res) => {
     }
 }
 
+<<<<<<< HEAD
 exports.student_update = async (req, res, ) => {
     try {
         const student = await studentModel.findByIdAndUpdate(req.params.id, req.body);
         await student.save();
         res.json(student);
     } catch (err) {
+=======
+<<<<<<< Updated upstream
+exports.student_update = async (req, res) => {
+
+=======
+<<<<<<< HEAD
+exports.student_update = async (req, res, ) => {
+>>>>>>> Stashed changes
+    try {
+        const student = await studentModel.findByIdAndUpdate(req.params.id, req.body);
+        await student.save();
+
+        res.status(200).json(student);
+
+    } catch (err) {
+<<<<<<< Updated upstream
+        res.status(500).send(err);
+=======
+=======
+exports.student_update = async (req, res) => {
+
+    try {
+        const student = await studentModel.findByIdAndUpdate(req.params.id, req.body);
+        await student.save();
+
+        res.status(200).json(student);
+
+    } catch (err) {
+        res.status(500).send(err);
+>>>>>>> 2372b1d273015cf5aaa1add235d2181283c36986
+>>>>>>> Stashed changes
+>>>>>>> 72befb2079107b1b72b7875125471c78924f95fc
         res.json(err);
     }
 }

@@ -2,14 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const middleware = require('./controllers/middleware/auth');
 
 // routes
 const studentRouter = require('./routes/student.route');
 const trainerRouter = require('./routes/trainer.route');
 const userRouter = require('./routes/user.route');
-
 const app = express();
-
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -25,9 +24,9 @@ mongoose.connect('mongodb+srv://user_mongodb:user_mongodb@clustercrud-vhqxe.mong
 });
 
 
-app.use('/students', studentRouter);
+app.use('/students', middleware.checkToken, studentRouter);
 app.use('/trainers', trainerRouter);
 app.use('/users', userRouter);
 
 
-app.listen(process.env.PORT || 3001 , () => { console.log(`Server is running n port ${process.env.PORT}`) });
+app.listen(process.env.PORT || 3001, () => { console.log(`Server is running n port ${process.env.PORT}`) });
