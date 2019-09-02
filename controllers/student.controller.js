@@ -20,35 +20,35 @@ exports.student_get = async (req, res) => {
         let query = {}
         let response = {}
 
-        if(pageNo < 0 || pageNo === 0) {
-           response = {"error" : true,"message" : "invalid page number, should start with 1"};
-           return res.json(response)
-       }
-
-       query.skip = size * (pageNo - 1);
-       query.limit = size;
-
-  // Find some documents
-  studentModel.estimatedDocumentCount({}, async (err, totalCount) => {
-   if(err) {
-    response = {"error" : true,"message" : "Error fetching data"}
-}
-
-studentModel.find({},{},query, async (err,data) => {
-              // Mongo command to fetch all data from collection.
-              if(err) {
-               response = {"error" : true,"message" : "Error fetching data"};
-           } else {
-            var totalPages = await Math.ceil(totalCount / size)
-            response = {"error" : false,"message" : data,"pages": totalPages};
+        if (pageNo < 0 || pageNo === 0) {
+            response = { "error": true, "message": "invalid page number, should start with 1" };
+            return res.json(response)
         }
-        res.json(response);
-    });
-})
 
-} catch (err) {
-    res.status(500).send(err);
-}
+        query.skip = size * (pageNo - 1);
+        query.limit = size;
+
+        // Find some documents
+        studentModel.estimatedDocumentCount({}, async (err, totalCount) => {
+            if (err) {
+                response = { "error": true, "message": "Error fetching data" }
+            }
+
+            studentModel.find({}, {}, query, async (err, data) => {
+                // Mongo command to fetch all data from collection.
+                if (err) {
+                    response = { "error": true, "message": "Error fetching data" };
+                } else {
+                    var totalPages = await Math.ceil(totalCount / size)
+                    response = { "error": false, "message": data, "pages": totalPages };
+                }
+                res.json(response);
+            });
+        })
+
+    } catch (err) {
+        res.status(500).send(err);
+    }
 
 }
 
@@ -65,16 +65,16 @@ exports.student_create = async (req, res) => {
 
         bcrypt.genSalt(10, async (err, salt) => {
             bcrypt.hash(myPlaintextPassword, salt, async (err, hash) => {
-        // Store hash in your password DB.
-        const user = new userModel({
-            user_id: student._id,
-            username: student.email,
-            password: hash,
-            restriction: 1
-        });
+                // Store hash in your password DB.
+                const user = new userModel({
+                    user_id: student._id,
+                    username: student.email,
+                    password: hash,
+                    restriction: 1
+                });
 
-        await user.save();
-    });
+                await user.save();
+            });
         });
 
 
@@ -89,7 +89,7 @@ exports.student_delete = async (req, res) => {
         const student = await studentModel.findByIdAndDelete(req.params.id);
 
         if (!student) res.status(404).send("No item found")
-            res.status(200).send()
+        res.status(200).send()
 
     } catch (err) {
         res.status(500).send(err);
@@ -101,7 +101,7 @@ exports.student_update = async (req, res) => {
     try {
         const student = await studentModel.findByIdAndUpdate(req.params.id, req.body);
         await student.save();
-        
+
         res.status(200).json(student);
 
     } catch (err) {
